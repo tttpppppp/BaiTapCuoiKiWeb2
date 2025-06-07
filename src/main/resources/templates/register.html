@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Đăng ký - ThoiSu360</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 min-h-screen flex items-center justify-center px-4">
+
+<div class="bg-white w-full max-w-5xl rounded-2xl shadow-lg overflow-hidden grid grid-cols-1 md:grid-cols-2">
+
+    <!-- Bên trái: Thông tin thương hiệu -->
+    <div class="bg-blue-700 text-white flex flex-col justify-center items-center p-10">
+        <h1 class="text-4xl font-bold mb-4">ThoiSu360</h1>
+        <p class="text-lg text-center leading-relaxed">Nền tảng tin tức hàng đầu<br />Cập nhật nhanh, chính xác, tin cậy</p>
+    </div>
+
+    <!-- Bên phải: Form đăng ký -->
+    <div class="p-10">
+        <h2 class="text-2xl font-bold text-gray-800 mb-6 text-center">Tạo tài khoản mới</h2>
+
+        <!-- Form gửi object -->
+        <form th:action="@{/signup}" th:object="${user}" method="post" class="space-y-5">
+            <p th:if="${error}" th:text="${error}" class="text-red-500 mt-2"></p>
+
+            <div>
+                <label for="fullName" class="block text-sm font-medium text-gray-700 mb-1">Họ và tên</label>
+                <input th:field="*{fullName}" type="text" id="fullName" required
+                       class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none" />
+            </div>
+
+            <div>
+                <label for="email" class="block text-sm font-medium text-gray-700 mb-1">Email</label>
+                <input th:field="*{email}" type="email" id="email" required
+                       class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none" />
+            </div>
+
+            <div>
+                <label for="password" class="block text-sm font-medium text-gray-700 mb-1">Mật khẩu</label>
+                <input th:field="*{password}" type="password" id="password" required
+                       class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none" />
+            </div>
+
+            <div>
+                <label for="confirmPassword" class="block text-sm font-medium text-gray-700 mb-1">Xác nhận mật khẩu</label>
+                <input th:field="*{confirmPassword}" type="password" id="confirmPassword" required
+                       class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none" />
+            </div>
+
+            <button type="submit"
+                    class="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 rounded-md transition font-medium">
+                Đăng ký
+            </button>
+        </form>
+
+        <p class="text-center text-sm text-gray-600 mt-6">
+            Đã có tài khoản?
+            <a th:href="@{/dangnhap}" class="text-blue-600 hover:underline">Đăng nhập</a>
+        </p>
+    </div>
+</div>
+
+</body>
+</html>

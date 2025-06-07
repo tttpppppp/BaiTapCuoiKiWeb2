@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{admin/base}">
+
+<head>
+  <title layout:title th:text="Dashboard">Dashboard</title>
+</head>
+<body>
+
+<main layout:fragment="content">
+  <h2 class="text-lg font-semibold mb-4">Quick Stats</h2>
+
+  <!-- Stats Cards -->
+  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+    <div class="bg-white p-6 rounded-lg shadow hover:shadow-md transition">
+      <div class="flex items-center justify-between mb-2">
+        <span class="text-sm text-gray-500">Người dùng</span>
+        <i class="ti ti-users text-2xl text-primary"></i>
+      </div>
+      <h3 class="text-2xl font-bold" th:text="${countUser}"></h3>
+
+    </div>
+
+    <div class="bg-white p-6 rounded-lg shadow hover:shadow-md transition">
+      <div class="flex items-center justify-between mb-2">
+        <span class="text-sm text-gray-500">Bài viết</span>
+        <i class="ti ti-mail text-2xl text-primary"></i>
+      </div>
+      <h3 class="text-2xl font-bold" th:text="${countBaiViet}"></h3>
+
+    </div>
+
+    <div class="bg-white p-6 rounded-lg shadow hover:shadow-md transition">
+      <div class="flex items-center justify-between mb-2">
+        <span class="text-sm text-gray-500">Số lượt truy cập</span>
+        <i class="ti ti-device-desktop text-2xl text-primary"></i>
+      </div>
+      <h3 class="text-2xl font-bold">34</h3>
+    </div>
+  </div>
+
+  <!-- Stats Chart -->
+  <div class="mt-8 bg-white rounded-lg shadow p-6">
+    <h3 class="text-lg font-semibold mb-4">Stats Overview</h3>
+    <div class="w-[600px]">
+      <canvas id="statsChart"></canvas>
+    </div>
+  </div>
+</main>
+
+</body>
+</html>

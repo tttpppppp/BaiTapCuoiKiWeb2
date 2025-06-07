@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{admin/base}">
+
+<head>
+    <title layout:title th:text="'Danh sách danh mục'">Danh sách danh mục</title>
+</head>
+<body>
+
+<main layout:fragment="content">
+    <h2 class="text-2xl font-semibold mb-6 flex justify-between items-center">
+        Danh sách danh mục
+        <a href="/danhmuc/add"
+           class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 text-sm font-medium">
+            + Thêm mới
+        </a>
+    </h2>
+    <div class="overflow-x-auto bg-white shadow rounded-lg p-4">
+        <p th:if="${message}" class="text-green-600 font-medium mb-3">
+            <span th:text="${message}"></span>
+        </p>
+
+        <table class="min-w-full divide-y divide-gray-200 text-sm table-auto">
+            <thead class="bg-gray-100 text-gray-700">
+            <tr>
+                <th class="px-4 py-2 text-left font-medium whitespace-nowrap">#</th>
+                <th class="px-4 py-2 text-left font-medium whitespace-nowrap">Tên danh mục</th>
+                <th class="px-4 py-2 text-left font-medium whitespace-nowrap">Slug</th>
+                <th class="px-4 py-2 text-left font-medium whitespace-nowrap">Trạng thái</th>
+                <th class="px-4 py-2 text-center font-medium whitespace-nowrap">Hành động</th>
+            </tr>
+            </thead>
+            <tbody class="divide-y divide-gray-200" th:if="${categories}">
+            <tr th:each="category, iterStat : ${categories}" class="hover:bg-gray-50 cursor-pointer">
+                <td class="px-4 py-2 text-gray-800 whitespace-nowrap" th:text="${iterStat.index + 1}">1</td>
+                <td class="px-4 py-2 text-gray-800 whitespace-nowrap" th:text="${category.name}">Tên danh mục</td>
+                <td class="px-4 py-2 text-gray-800 whitespace-nowrap" th:text="${category.slug}">slug</td>
+                <td class="px-4 py-2 whitespace-nowrap">
+                    <span th:if="${category.status}" class="inline-block bg-blue-100 text-blue-700 text-sm font-medium px-2 py-1 rounded-full">
+                        Hiển thị
+                    </span>
+                    <span th:unless="${category.status}" class="inline-block bg-red-100 text-red-700 text-sm font-medium px-2 py-1 rounded-full">
+                        Ẩn
+                    </span>
+                </td>
+                <td class="px-4 py-2 text-center whitespace-nowrap">
+                    <a th:href="@{/danhmuc/edit/{id}(id=${category.id})}"
+                       class="text-yellow-400 hover:underline">Sửa</a> |
+                    <a th:href="@{/danhmuc/delete/{id}(id=${category.id})}"
+                       class="text-red-600 hover:underline">Xóa</a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</main>
+
+</body>
+</html>

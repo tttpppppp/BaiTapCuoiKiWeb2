@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+
+<head>
+    <meta charset="UTF-8">
+    <title layout:title>My Site</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f7fafc;
+            color: #1a202c;
+            margin: 0;
+            line-height: 1.6;
+        }
+        .line-clamp-2 {
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+        .line-clamp-3 {
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+        .hamburger {
+            display: none;
+        }
+        @media (max-width: 768px) {
+            .hamburger {
+                display: block;
+            }
+            .nav-menu {
+                display: none;
+            }
+            .nav-menu.active {
+                display: flex;
+                flex-direction: column;
+                position: absolute;
+                top: 72px;
+                left: 0;
+                right: 0;
+                background: white;
+                box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+                z-index: 50;
+            }
+        }
+        .email-display {
+            max-width: 120px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            display: inline-block;
+            vertical-align: middle;
+        }
+    </style>
+
+</head>
+
+<body>
+<!-- Header -->
+<!-- Header -->
+<header class="bg-white shadow-lg sticky top-0 z-50 transition-all duration-300">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex items-center justify-between">
+        <!-- Logo -->
+        <a href="/" class="select-none inline-block text-3xl font-extrabold tracking-tight transition-all duration-300 ease-in-out">
+  <span class="bg-gradient-to-r from-red-600 via-red-700 to-blue-800 bg-clip-text text-transparent hover:scale-105 hover:drop-shadow-lg">
+    ThoiSu360
+  </span>
+            <span class="block text-xs font-medium text-gray-600 dark:text-gray-300 tracking-wider mt-1">
+    Thời Sự & Tin Tức
+  </span>
+        </a>
+
+        <!-- Right: Search + Login -->
+        <div class="flex items-center space-x-6">
+            <!-- Search -->
+            <form class="relative hidden md:flex items-center" action="/tintuc/timkiem" method="GET">
+                <input name="keyword" type="text" placeholder="Tìm kiếm tin tức..."
+                       class="pl-10 pr-4 py-2 rounded-full border border-gray-200 bg-gray-50 focus:outline-none focus:ring-2 focus:ring-red-500 text-sm w-64 transition-all duration-300 hover:bg-white hover:shadow-sm" />
+                <svg class="w-5 h-5 text-gray-400 absolute left-3 top-1/2 transform -translate-y-1/2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                          d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+                </svg>
+            </form>
+
+            <!-- User Info -->
+            <div class="flex items-center space-x-4">
+                <span th:if="${session.user != null}" class="text-sm font-medium text-gray-800 flex items-center">
+                    <span class="email-display hidden sm:inline" th:text="${session.user.email}"></span>
+                    <a href="/dangxuat" class="ml-3 text-sm text-red-600 hover:text-red-700 font-medium transition-colors duration-200 bg-red-50 px-3 py-1 rounded-full hover:bg-red-100">
+                        Đăng xuất
+                    </a>
+                </span>
+                <a th:if="${session.user == null}" href="/dangnhap" class="text-sm text-red-600 hover:text-red-700 font-medium transition-colors duration-200 bg-red-50 px-3 py-1 rounded-full hover:bg-red-100">
+                    Đăng nhập
+                </a>
+            </div>
+
+            <!-- Mobile Menu Button -->
+            <button class="md:hidden text-gray-600 hover:text-red-600 focus:outline-none transition-colors duration-200" aria-label="Toggle menu">
+                <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                          d="M4 6h16M4 12h16m-7 6h7"/>
+                </svg>
+            </button>
+        </div>
+    </div>
+</header>
+
+<!-- Category Navigation -->
+<nav class="bg-gradient-to-r from-gray-50 to-gray-100 border-b border-gray-200 sticky top-[64px] z-40 shadow-sm">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3">
+        <ul class="flex flex-wrap gap-2 font-medium text-gray-700 text-sm">
+            <li th:each="cate : ${categories}">
+                <a th:href="@{/danhmuc/{slug}(slug=${cate.slug})}"
+                   th:text="${cate.name}"
+                   class="relative px-3 py-2 rounded-md hover:bg-red-50 hover:text-red-600 transition-all duration-200 group">
+                    <span class="relative z-10" th:text="${cate.name}"></span>
+                    <span class="absolute bottom-0 left-0 w-full h-0.5 bg-red-500 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left"></span>
+                </a>
+            </li>
+        </ul>
+    </div>
+</nav>
+
+<!-- Mobile Menu (Hidden by default, toggled by JS) -->
+<div class="md:hidden hidden bg-gray-50 border-b border-gray-200" id="mobile-menu">
+    <ul class="flex flex-col space-y-2 px-4 py-4 font-medium text-gray-600 text-sm">
+        <li th:each="cate : ${categories}">
+            <a th:href="@{/danhmuc/{slug}(slug=${cate.slug})}"
+               th:text="${cate.name}"
+               class="hover:text-blue-500 transition duration-200 py-1 block"></a>
+        </li>
+    </ul>
+</div>
+
+<main layout:fragment="content">
+
+</main>
+
+<footer class="bg-gray-900 text-gray-300 py-12">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8">
+        <div>
+            <h3 class="text-lg font-semibold text-white mb-4">Về TinTucPro</h3>
+            <p class="text-sm">TinTucPro cung cấp tin tức nhanh chóng, chính xác và đa dạng từ khắp nơi trên thế giới.</p>
+        </div>
+        <div>
+            <h3 class="text-lg font-semibold text-white mb-4">Danh mục</h3>
+            <ul class="space-y-2 text-sm">
+                <li><a href="#" class="hover:text-blue-400 transition">Thế giới</a></li>
+                <li><a href="#" class="hover:text-blue-400 transition">Kinh tế</a></li>
+                <li><a href="#" class="hover:text-blue-400 transition">Giải trí</a></li>
+                <li><a href="#" class="hover:text-blue-400 transition">Thể thao</a></li>
+            </ul>
+        </div>
+        <div>
+            <h3 class="text-lg font-semibold text-white mb-4">Hỗ trợ</h3>
+            <ul class="space-y-2 text-sm">
+                <li><a href="#" class="hover:text-blue-400 transition">Liên hệ</a></li>
+                <li><a href="#" class="hover:text-blue-400 transition">Điều khoản sử dụng</a></li>
+                <li><a href="#" class="hover:text-blue-400 transition">Chính sách bảo mật</a></li>
+            </ul>
+        </div>
+        <div>
+            <h3 class="text-lg font-semibold text-white mb-4">Liên hệ</h3>
+            <p class="text-sm">Email: contact@tintucpro.com</p>
+            <p class="text-sm">Điện thoại: (+84) 123 456 789</p>
+            <div class="flex space-x-4 mt-4">
+                <a href="#" class="text-gray-300 hover:text-blue-400"><svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M24 4.56v14.88A4.56 4.56 0 0 1 19.44 24H4.56A4.56 4.56 0 0 1 0 19.44V4.56A4.56 4.56 0 0 1 4.56 0h14.88A4.56 4.56 0 0 1 24 4.56zM8.9 19.44v-8.88h-2.64v8.88H8.9zm-1.32-10.2a1.44 1.44 0 1 0 0-2.88 1.44 1.44 0 0 0 0 2.88zm12.54 10.2v-4.8c0-2.64-1.44-3.84-3.36-3.84-1.56 0-2.28.84-2.64 1.44v-1.2h-2.64v8.4h2.64v-4.68c0-1.2.84-2.28 2-2.28s2 1.08 2 2.28v4.68h2.64z"/></svg></a>
+                <a href="#" class="text-gray-300 hover:text-blue-400"><svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M22.46 6c-.77.34-1.6.57-2.46.67a4.3 4.3 0 0 0 1.88-2.37 8.6 8.6 0 0 1-2.72 1.04A4.28 4.28 0 0 0 16 4c-2.36 0-4.28 1.92-4.28 4.28 0 .34.04.67.11 1-3.56-.18-6.72-1.88-8.84-4.48a4.3 4.3 0 0 0-.58 2.15A4.28 4.28 0 0 0 4.28 11a4.27 4.27 0 0 1-1.93-.53v.05c0 2.07 1.47 3.8 3.43 4.2a4.28 4.28 0 0 1-1.93.07 4.28 4.28 0 0 0 4 2.97 8.58 8.58 0 0 1-5.3 1.83c-.34 0-.67-.02-1-.06A12.1 12.1 0 0 0 7.8 21c7.9 0 12.22-6.54 12.22-12.22 0-.19 0-.37-.01-.56A8.72 8.72 0 0 0 22.46 6z"/></svg></a>
+                <a href="#" class="text-gray-300 hover:text-blue-400"><svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.04c-5.52 0-10 4.48-10 10 0 4.42 3.58 8.06 8.12 8.88v-6.28H7.92v-2.6h2.2V9.76c0-2.18 1.3-3.38 3.3-3.38.94 0 1.94.16 1.94.16v2.14h-1.1c-1.08 0-1.42.68-1.42 1.38v1.66h2.4l-.38 2.6h-2.02v6.28c4.54-.82 8.12-4.46 8.12-8.88 0-5.52-4.48-10-10-10z"/></svg></a>
+            </div>
+        </div>
+    </div>
+    <div class="border-t border-gray-700 mt-8 pt-4 text-center text-sm">
+        <p>© 2025 TinTucPro. Bản quyền thuộc về TinTucPro.</p>
+    </div>
+</footer>
+
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</script>
+
+<script>
+    $('#submitCommentBtn').click(function(e) {
+        e.preventDefault();
+        const articleId = $('#articleId').val();
+        const authorId = $('#authorId').val();
+        const content = $('#commentContent').val().trim();
+
+        if(!content) {
+            alert('Vui lòng nhập bình luận!');
+            return;
+        }
+
+        $.ajax({
+            url: '/addComment',
+            type: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify({
+                articleId: articleId,
+                authorId: authorId,
+                content: content
+            }),
+            success: function(response) {
+                // response giả sử có { userName, content, createdAt }
+                const createdAt = new Date(response.createdAt);
+                const formattedDate = createdAt.toLocaleDateString('vi-VN') + ' ' + createdAt.toLocaleTimeString('vi-VN');
+
+                const newComment = `
+                    <div class="flex items-start space-x-4">
+                        <div class="w-12 h-12 bg-gray-200 rounded-full"></div>
+                        <div>
+                            <p class="font-semibold text-gray-800">${response.userName}</p>
+                            <p class="text-gray-600">${response.content}</p>
+                            <p class="text-xs text-gray-400">${formattedDate}</p>
+                        </div>
+                    </div>`;
+
+                $('#commentList').prepend(newComment);
+                $('#commentContent').val(''); // reset textarea
+            },
+            error: function(xhr) {
+                alert(xhr.responseText || 'Lỗi khi gửi bình luận');
+            }
+        });
+    });
+</script>
+
+</body>
+</html>

@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{base}">
+
+<head>
+    <title layout:title="Trang chủ">Trang Chủ - ThoiSu360</title>
+</head>
+<body>
+
+<main layout:fragment="content">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 py-10">
+        <!-- BÀI VIẾT NỔI BẬT -->
+        <section class="mb-12">
+            <h2 class="text-3xl font-bold mb-6 text-gray-900 border-l-4 border-blue-600 pl-4">
+                Tin tức nổi bật
+            </h2>
+            <div class="flex flex-col md:flex-row gap-6">
+                <div class="md:w-8/12">
+                    <a th:href="@{/tintuc/{slug}(slug=${featuredArticle.slug})}">
+                        <article th:if="${featuredArticle}"
+                                 class="relative group cursor-pointer overflow-hidden rounded-xl shadow-lg bg-white hover:shadow-xl transition h-full flex flex-col">
+                            <img th:src="${featuredArticle.image}" th:alt="${featuredArticle.title}"
+                                 class="w-full h-72 object-cover group-hover:scale-105 transition-transform duration-500" />
+                            <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-6">
+                                <h3 th:text="${featuredArticle.title}"
+                                    class="text-white text-xl font-bold leading-tight group-hover:underline"></h3>
+                                <p th:text="${featuredArticle.description}" class="text-gray-200 mt-1 text-sm line-clamp-2"></p>
+                                <span class="text-xs text-gray-300 mt-2 block">Tác giả: TinTucPro</span>
+                            </div>
+                        </article>
+                    </a>
+                </div>
+                <div class="md:w-4/12 flex flex-col gap-4">
+                        <a th:each="article : ${subFeaturedArticles}"
+                           th:href="@{/tintuc/{slug}(slug=${article.slug})}"
+                           class="flex gap-4 bg-white rounded-lg shadow hover:shadow-md transition overflow-hidden group no-underline">
+                            <img th:src="${article.image}" th:alt="${article.title}" class="w-20 h-20 object-cover" />
+                            <div class="flex flex-col justify-between py-2 pr-2">
+                                <h4 class="text-sm font-semibold text-gray-800 group-hover:text-blue-600 line-clamp-1"
+                                    th:text="${article.title}"></h4>
+
+                                <p class="line-clamp-1 text-xs" th:text="${article.description}"></p>
+                                <span class="text-xs text-gray-400 mt-1"
+                                      th:text="${#temporals.format(article.createdAt, 'dd/MM/yyyy')}">Ngày tạo</span>
+                            </div>
+                        </a>
+                </div>
+            </div>
+        </section>
+        <!-- DANH MỤC TIN TỨC -->
+        <section th:each="category : ${categoriesArticles}" class="mb-14">
+            <div class="flex justify-between items-center mb-4">
+                <h2 th:text="${category.name}" class="text-xl font-semibold text-gray-900 border-l-4 border-blue-600 pl-3"></h2>
+                <a th:href="@{'/danhmuc/' + ${category.slug}}" class="text-blue-600 hover:underline font-medium text-sm">Xem tất cả &rarr;</a>
+            </div>
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+                <article th:each="article : ${category.articles}" class="bg-white border border-gray-100 rounded-lg shadow-sm hover:shadow-md transition group">
+                    <a th:href="@{/tintuc/{slug}(slug=${article.slug})}" class="block">
+                        <div class="relative">
+                            <img th:src="${article.image}" th:alt="${article.title}"
+                                 class="w-full h-48 object-cover rounded-t-lg group-hover:scale-105 transition-transform duration-300" />
+                            <span class="absolute top-2 left-2 bg-blue-600 text-white text-xs px-2 py-1 rounded" th:text="${category.name}"></span>
+                        </div>
+                        <div class="p-4">
+                            <h3 th:text="${article.title}" class="text-gray-800 font-semibold text-base line-clamp-2 group-hover:text-blue-700 transition"></h3>
+                            <p th:text="${article.description}" class="text-gray-600 text-sm mt-2 line-clamp-3"></p>
+                            <div class="text-xs text-gray-500 mt-3 flex justify-between">
+                                <span class="text-gray-800 whitespace-nowrap"
+                                    th:text="${#temporals.format(article.createdAt, 'dd/MM/yyyy')}">Ngày tạo</span>
+                                <span>Tác giả: ThoiSu360</span>
+                            </div>
+                        </div>
+                    </a>
+                </article>
+            </div>
+        </section>
+    </div>
+</main>
+
+</body>
+</html>

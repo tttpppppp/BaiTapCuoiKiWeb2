@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{admin/base}">
+
+<head>
+  <title layout:title th:text="'Sửa bài viết'">Sửa bài viết</title>
+</head>
+<body>
+
+<main layout:fragment="content">
+  <div class="max-w-4xl mx-auto bg-white rounded-xl shadow-md p-6">
+    <h2 class="text-2xl font-bold mb-4">Sửa Bài Viết</h2>
+
+    <!-- Thay action thành URL update, vd có id trong article -->
+    <form th:action="@{/baiviet/edit/{id}(id=${article.id})}" th:object="${article}" method="post" class="space-y-4">
+      <input type="hidden" name="_method" value="put" /> <!-- nếu dùng Spring xử lý PUT qua POST -->
+      <input type="hidden" th:field="*{id}" />
+
+      <p th:if="${message}"> <span th:text="${message}"></span>!</p>
+
+      <div>
+        <label class="block font-medium">Tiêu đề</label>
+        <input type="text" th:field="*{title}" required
+               class="w-full border border-gray-300 rounded px-4 py-2" />
+      </div>
+
+      <div>
+        <label class="block font-medium">Mô tả</label>
+        <textarea th:field="*{description}" rows="2"
+                  class="w-full border border-gray-300 rounded px-4 py-2"></textarea>
+      </div>
+
+      <div>
+        <label class="block font-medium">Ảnh (URL)</label>
+        <input type="text" th:field="*{image}" class="w-full border border-gray-300 rounded px-4 py-2" />
+      </div>
+
+      <div>
+        <label class="block font-medium">Nội dung</label>
+        <textarea id="content" th:field="*{content}" rows="10" class="w-full border rounded px-3 py-2"></textarea>
+      </div>
+
+      <div>
+        <label class="block font-medium">Danh mục</label>
+        <select th:field="*{category}" class="w-full border border-gray-300 rounded px-4 py-2">
+          <option th:each="c : ${categories}" th:value="${c.id}" th:text="${c.name}"
+                  th:selected="${c.id == article.category.id}"></option>
+        </select>
+      </div>
+      <div>
+        <label class="block font-medium">Trạng thái</label>
+        <select th:field="*{status}" class="w-full border border-gray-300 rounded px-4 py-2">
+          <option th:value="true" th:text="'Hiển thị'"></option>
+          <option th:value="false" th:text="'Ẩn'"></option>
+        </select>
+      </div>
+
+      <div class="flex items-center gap-4">
+        <label class="flex items-center">
+          <input type="checkbox" th:field="*{status}" class="mr-2" />
+          Hiển thị bài viết
+        </label>
+
+        <label class="flex items-center">
+          <input type="checkbox" th:field="*{featured}" class="mr-2" />
+          Nổi bật
+        </label>
+      </div>
+
+      <div class="flex gap-4">
+        <button type="submit"
+                class="bg-green-600 text-white px-6 py-2 rounded hover:bg-green-700 transition">
+          Cập nhật bài viết
+        </button>
+        <a href="/baiviet/list"
+           class="bg-gray-300 text-gray-700 px-6 py-2 rounded hover:bg-gray-400 transition">
+          Hủy
+        </a>
+      </div>
+
+    </form>
+  </div>
+</main>
+
+</body>
+</html>
